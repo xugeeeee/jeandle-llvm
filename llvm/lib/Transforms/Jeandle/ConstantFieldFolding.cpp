@@ -444,8 +444,8 @@ PreservedAnalyses ConstantFieldFolding::run(Function &F,
     return PreservedAnalyses::all();
 
   const jeandle::VMCallbacks *CB = jeandle::getVMCallbacks();
-  assert(CB && CB->GetConstantFieldInfo && CB->GetConstantFieldValue &&
-         "VMCallbacks must be set");
+  if (!CB || !CB->GetConstantFieldInfo || !CB->GetConstantFieldValue)
+    return PreservedAnalyses::all();
 
   const DataLayout &DL = M->getDataLayout();
 
